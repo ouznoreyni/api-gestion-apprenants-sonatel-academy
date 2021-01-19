@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\ProfilFixtures;
 use App\Entity\Admin;
 use App\Entity\Apprenant;
 use App\Entity\CommunityManager;
@@ -29,6 +30,8 @@ class UsersFixtures extends Fixture
             $admin = new Admin();
             $admin = $this->setUsersFields($admin, $faker);
             $password = $this->passwordEncoder->encodePassword($admin, 'admin');
+            $admin->setProfil($this->getReference(ProfilFixtures::ADMIN_PROFIL_REFERENCE));
+
             $admin->setPassword($password);
             $admin->setRoles(['ROLE_ADMIN']);
             if ($i == 1) {
@@ -40,6 +43,8 @@ class UsersFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $formateur = new Formateur();
             $formateur = $this->setUsersFields($formateur, $faker);
+            $formateur->setProfil($this->getReference(ProfilFixtures::FORMATEUR_PROFIL_REFERENCE));
+
             $password = $this->passwordEncoder->encodePassword($formateur, 'formateur');
             $formateur->setPassword($password);
             $formateur->setRoles(['ROLE_FORMATEUR']);
@@ -52,6 +57,7 @@ class UsersFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $apprenant = new Apprenant();
             $apprenant = $this->setUsersFields($apprenant, $faker);
+            $apprenant->setProfil($this->getReference(ProfilFixtures::APPRENANT_PROFIL_REFERENCE));
             $password = $this->passwordEncoder->encodePassword($apprenant, 'apprenant');
             $apprenant->setPassword($password);
             $apprenant->setRoles(['ROLE_APPRENANT']);
@@ -67,6 +73,7 @@ class UsersFixtures extends Fixture
             $cm = $this->setUsersFields($cm, $faker);
             $password = $this->passwordEncoder->encodePassword($cm, 'communitymanager');
             $cm->setPassword($password);
+            $cm->setProfil($this->getReference(ProfilFixtures::COMMUNITYMANAGER_PROFIL_REFERENCE));
             $cm->setRoles(['ROLE_CM']);
             if ($i == 1) {
                 $cm->setEmail("cm@odc.sn");

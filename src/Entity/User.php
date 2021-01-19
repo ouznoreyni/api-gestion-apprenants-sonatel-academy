@@ -68,7 +68,8 @@ class User implements UserInterface
      *  "apprenant:write", "apprenant:read",
      *  "formateur:write", "formateur:read",
      *  "user:write", "user:read",
-     *  "cm:write", "cm:read"
+     *  "cm:write", "cm:read",
+     *  "profil:read"
      * })
      */
     protected $email;
@@ -81,7 +82,8 @@ class User implements UserInterface
      *  "apprenant:read",
      *  "formateur:read",
      *  "user:read",
-     *  "cm:read"
+     *  "cm:read",
+     *  "profil:read"
      * })
      */
     protected $roles = [];
@@ -108,7 +110,8 @@ class User implements UserInterface
      *  "apprenant:write", "apprenant:read",
      *  "formateur:write", "formateur:read",
      *  "user:write", "user:read",
-     *  "cm:write", "cm:read"
+     *  "cm:write", "cm:read",
+     *  "profil:read"
      * })
      */
     protected $prenom;
@@ -121,7 +124,8 @@ class User implements UserInterface
      *  "apprenant:write", "apprenant:read",
      *  "formateur:write", "formateur:read",
      *  "user:write", "user:read",
-     *  "cm:write", "cm:read"
+     *  "cm:write", "cm:read",
+     *  "profil:read"
      * })
      */
     protected $nom;
@@ -134,7 +138,8 @@ class User implements UserInterface
      *  "apprenant:write", "apprenant:read",
      *  "formateur:write", "formateur:read",
      *  "user:write", "user:read",
-     *  "cm:write", "cm:read"
+     *  "cm:write", "cm:read",
+     *  "profil:read"
      * })
      */
     protected $avatar;
@@ -147,10 +152,26 @@ class User implements UserInterface
      *  "apprenant:read",
      *  "formateur:read",
      *  "user:read",
-     *  "cm:read"
+     *  "cm:read",
+     *  "profil:read"
      * })
      */
     protected $archiver;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({
+     *  "admin:write", "admin:read",
+     *  "apprenant:write", "apprenant:read",
+     *  "formateur:write", "formateur:read",
+     *  "user:write", "user:read",
+     *  "cm:write", "cm:read",
+     *  "profil:read"
+     * })
+     */
+    private $profil;
 
     public function __construct()
     {
@@ -281,6 +302,18 @@ class User implements UserInterface
     public function setArchiver(bool $archiver): self
     {
         $this->archiver = $archiver;
+
+        return $this;
+    }
+
+    public function getProfil(): ?Profil
+    {
+        return $this->profil;
+    }
+
+    public function setProfil(?Profil $profil): self
+    {
+        $this->profil = $profil;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ProfilRepository;
 use App\Services\FileHelperService;
 use App\Services\UtilsService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,17 +22,20 @@ class UsersController extends AbstractController
     private $_passwordEncoder;
     private $_validator;
     private $_serializer;
+    private $_profilRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        ProfilRepository $profilRepository
     ) {
         $this->_entityManager = $entityManager;
         $this->_passwordEncoder = $passwordEncoder;
         $this->_validator = $validator;
         $this->_serializer = $serializer;
+        $this->_profilRepository = $profilRepository;
     }
 
     /**
@@ -45,9 +49,15 @@ class UsersController extends AbstractController
         //get data and avatar from the request
         $data = $utils->getData($request);
         $avatar = $fileHelper->uploadFile($request->files->get("avatar"));
+        $profil = $this->_profilRepository->findOneById($data['profil']);
+        unset($data['profil']);
+
+        if (!$profil) {
+            return $this->json(['error' => "le profil n'existe pas"], Response::HTTP_NOT_FOUND);
+        }
 
         //denormalize user
-        $user = $utils->denormalizeUser($this->_serializer, $data, "cm");
+        $user = $utils->denormalizeUser($this->_serializer, $data, $profil->getLibelle());
 
         $passwordHashed = $utils->hashPassword($this->_passwordEncoder, $user, "sonatelacademy");
         $user->setPassword($passwordHashed);
@@ -61,7 +71,8 @@ class UsersController extends AbstractController
         if ($avatar) {
             $user->setAvatar($avatar);
         }
-        // dd($user);
+        $user->setProfil($profil);
+
         $this->_entityManager->persist($user);
         $this->_entityManager->flush();
 
