@@ -71,7 +71,7 @@ class User implements UserInterface
      *  "cm:write", "cm:read"
      * })
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="json")
@@ -84,7 +84,7 @@ class User implements UserInterface
      *  "cm:read"
      * })
      */
-    private $roles = [];
+    protected $roles = [];
 
     /**
      * @var string The hashed password
@@ -98,12 +98,20 @@ class User implements UserInterface
      *  "cm:write"
      * })
      */
-    private $password;
+    protected $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({
+     *  "admin:write", "admin:read",
+     *  "apprenant:write", "apprenant:read",
+     *  "formateur:write", "formateur:read",
+     *  "user:write", "user:read",
+     *  "cm:write", "cm:read"
+     * })
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -116,7 +124,7 @@ class User implements UserInterface
      *  "cm:write", "cm:read"
      * })
      */
-    private $nom;
+    protected $nom;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
@@ -129,7 +137,7 @@ class User implements UserInterface
      *  "cm:write", "cm:read"
      * })
      */
-    private $avatar;
+    protected $avatar;
 
     /**
      * @ORM\Column(type="boolean")
@@ -142,7 +150,7 @@ class User implements UserInterface
      *  "cm:read"
      * })
      */
-    private $archiver;
+    protected $archiver;
 
     public function __construct()
     {
@@ -252,7 +260,10 @@ class User implements UserInterface
 
     public function getAvatar()
     {
-        return $this->avatar;
+        $avatar = @stream_get_contents($this->avatar);
+        @fclose($this->avatar);
+        return base64_encode($avatar);
+
     }
 
     public function setAvatar($avatar): self
