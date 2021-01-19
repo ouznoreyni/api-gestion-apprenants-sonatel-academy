@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
- * @InheritanceType("SINGLE_TABLE")
+ * @InheritanceType("JOINED")
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({
  *      "user":"User",

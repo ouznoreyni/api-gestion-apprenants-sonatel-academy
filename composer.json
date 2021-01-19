@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.8",
+        "fzaninotto/faker": "^1.9",
         "lexik/jwt-authentication-bundle": "^2.10",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -63,7 +64,14 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "dev":[
+            "php bin/console doctrine:database:drop --force",
+            "php bin/console doctrine:database:create",
+            "symfony console doctrine:schema:update --force",
+            "php bin/console doctrine:fixtures:load -n",
+            "symfony console c:c"
+         ]
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -75,6 +83,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/maker-bundle": "^1.28"
     }
 }
