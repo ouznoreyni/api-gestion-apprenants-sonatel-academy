@@ -6,6 +6,7 @@ use App\Entity\Admin;
 use App\Entity\Apprenant;
 use App\Entity\CommunityManager;
 use App\Entity\Formateur;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -24,50 +25,64 @@ class UsersFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
         //admin
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $admin = new Admin();
-            $admin->setPrenom($faker->firstName);
-            $admin->setNom($faker->lastName);
-            $admin->setEmail($faker->email);
+            $admin = $this->setUsersFields($admin, $faker);
             $password = $this->passwordEncoder->encodePassword($admin, 'admin');
             $admin->setPassword($password);
             $admin->setRoles(['ROLE_ADMIN']);
+            if ($i == 1) {
+                $admin->setEmail("admin@odc.sn");
+            }
             $manager->persist($admin);
         }
         //formateur
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $formateur = new Formateur();
-            $formateur->setPrenom($faker->firstName);
-            $formateur->setNom($faker->lastName);
-            $formateur->setEmail($faker->email);
+            $formateur = $this->setUsersFields($formateur, $faker);
             $password = $this->passwordEncoder->encodePassword($formateur, 'formateur');
             $formateur->setPassword($password);
             $formateur->setRoles(['ROLE_FORMATEUR']);
+            if ($i == 1) {
+                $formateur->setEmail("formateur@odc.sn");
+            }
             $manager->persist($formateur);
         }
         //apprenant
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $apprenant = new Apprenant();
-            $apprenant->setPrenom($faker->firstName);
-            $apprenant->setNom($faker->lastName);
-            $apprenant->setEmail($faker->email);
+            $apprenant = $this->setUsersFields($apprenant, $faker);
             $password = $this->passwordEncoder->encodePassword($apprenant, 'apprenant');
             $apprenant->setPassword($password);
             $apprenant->setRoles(['ROLE_APPRENANT']);
+            if ($i == 1) {
+                $apprenant->setEmail("apprenant@odc.sn");
+            }
+
             $manager->persist($apprenant);
         }
         //cm
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $cm = new CommunityManager();
-            $cm->setPrenom($faker->firstName);
-            $cm->setNom($faker->lastName);
-            $cm->setEmail($faker->email);
+            $cm = $this->setUsersFields($cm, $faker);
             $password = $this->passwordEncoder->encodePassword($cm, 'communitymanager');
             $cm->setPassword($password);
             $cm->setRoles(['ROLE_CM']);
+            if ($i == 1) {
+                $cm->setEmail("cm@odc.sn");
+            }
+
             $manager->persist($cm);
         }
         $manager->flush();
 
+    }
+
+    public function setUsersFields(User $user, $faker): ?User
+    {
+        $user->setPrenom($faker->firstName);
+        $user->setNom($faker->lastName);
+        $user->setEmail($faker->email);
+        return $user;
     }
 }
