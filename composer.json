@@ -74,8 +74,9 @@
             "php bin/console doctrine:database:create",
             "symfony console doctrine:schema:update --force",
             "php bin/console doctrine:fixtures:load -n",
-            "symfony console c:c"
-         ]
+            "symfony console c:c",
+            "symfony serve -d --no-tls"
+        ]         
     },
     "conflict": {
         "symfony/symfony": "*"
