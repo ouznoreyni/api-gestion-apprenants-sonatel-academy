@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      "communityManager"="CommunityManager", "formateur"="Formateur"})
  * @ApiResource(
  *       attributes={
- *          "pagination_items_per_page"=10
+ *          "pagination_items_per_page"=5
  *      },
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
