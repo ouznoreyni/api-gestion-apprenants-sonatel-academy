@@ -4,12 +4,12 @@ api_platform:
     version: '1.0.0'
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
-    #formats:
-    #    json: ['application/json']
+    formats:
+        json: ['application/json']
 
-    patch_formats:
-        json: ['application/merge-patch+json']
-        multipart: ['multipart/form-data']
+    #patch_formats:
+        #json: ['application/merge-patch+json']
+        #multipart: ['multipart/form-data']
     swagger:
         versions: [3]
     collection:
