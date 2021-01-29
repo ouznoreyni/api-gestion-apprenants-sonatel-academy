@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Count;
 
 /**
  * @ApiResource(
@@ -57,12 +59,12 @@ class Competences
      *
      * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
-    private $niveauxes;
+    private $niveaux;
 
     public function __construct()
     {
         $this->groupeCompetences = new ArrayCollection();
-        $this->niveauxes = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
         $this->setArchiver(false);
     }
 
@@ -125,15 +127,15 @@ class Competences
     /**
      * @return Collection|Niveaux[]
      */
-    public function getNiveauxes(): Collection
+    public function getNiveaux(): Collection
     {
-        return $this->niveauxes;
+        return $this->niveaux;
     }
 
     public function addNiveaux(Niveaux $niveaux): self
     {
-        if (!$this->niveauxes->contains($niveaux)) {
-            $this->niveauxes[] = $niveaux;
+        if (!$this->niveaux->contains($niveaux)) {
+            $this->niveaux[] = $niveaux;
             $niveaux->setCompetences($this);
         }
 
@@ -142,7 +144,7 @@ class Competences
 
     public function removeNiveaux(Niveaux $niveaux): self
     {
-        if ($this->niveauxes->removeElement($niveaux)) {
+        if ($this->niveaux->removeElement($niveaux)) {
             // set the owning side to null (unless already changed)
             if ($niveaux->getCompetences() === $this) {
                 $niveaux->setCompetences(null);
