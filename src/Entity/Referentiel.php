@@ -7,9 +7,28 @@ use App\Repository\ReferentielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      routePrefix="/admin",
+ *      normalizationContext={"groups"={"ref:read"}},
+ *      denormalizationContext={"groups"={"ref:write"}},
+ *      collectionOperations={
+ *          "POST"={},
+ *          "GET"={},
+ *          "get_grpecompetence_have_competences"={
+ *              "method"="GET",
+ *              "path"="/referentiels/groupe-competences" ,
+ *              "normalization_context"={"groups"={"ref:read"}},
+ *             }
+ *      },
+ *      itemOperations={
+ *          "GET"={},
+ *          "PUT"={},
+ *          "DELETE"
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
 class Referentiel
@@ -18,31 +37,45 @@ class Referentiel
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"ref:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"ref:read","ref:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @Groups({"ref:read","ref:write"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="blob")
+     *
+     * @Groups({"ref:read","ref:write"})
      */
     private $programme;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetences::class, inversedBy="referentiels")
+     * @ORM\ManyToMany(targetEntity=GroupeCompetences::class, inversedBy="referentiels", cascade={"persist"})
+     *
+     * @ApiSubresource()
+     *
+     * @Groups({"ref:read", "ref:write"})
      */
     private $competences;
 
     /**
      * @ORM\Column(type="boolean")
+     *
+     * Groups({"ref:read"})
      */
     private $archiver;
 

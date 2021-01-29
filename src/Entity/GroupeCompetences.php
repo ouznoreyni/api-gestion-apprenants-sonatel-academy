@@ -7,9 +7,27 @@ use App\Repository\GroupeCompetencesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={"groups"={"grpcomp:read"}},
+ *      denormalizationContext={"groups"={"grpcomp:write"}},
+ *      routePrefix="/admin/",
+ *      collectionOperations={
+ *          "POST"={"path"="/groupe-competences"},
+ *          "GET"={"path"="/groupe-competences"},
+ *          "get_grpecompetence_have_competences"={
+ *              "method"="GET",
+ *              "path"="/groupe-competences/competences" ,
+ *              "normalization_context"={"groups"={"comp:read"}},
+ *             }
+ *      },
+ *      itemOperations={
+ *          "GET"={"path"="/groupe-competences/{id}"},
+ *          "PUT"={"path"="/groupe-competences/{id}"}
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=GroupeCompetencesRepository::class)
  */
 class GroupeCompetences
@@ -18,21 +36,29 @@ class GroupeCompetences
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"grpcomp:read", "ref:read", "ref:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"grpcomp:read", "grpcomp:write", "grpcomp:read", "comp:read", "ref:read", "ref:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competences::class, inversedBy="groupeCompetences")
+     * @ORM\ManyToMany(targetEntity=Competences::class, inversedBy="groupeCompetences", cascade={"persist"})
+     *@ApiSubresource
+
+     * @Groups({"grpcomp:read", "grpcomp:write", "comp:read", "ref:read", "ref:write"})
      */
     private $competences;
 

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\NiveauxRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NiveauxRepository::class)
@@ -14,16 +15,22 @@ class Niveaux
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
     private $criteresEvaluation;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
     private $groupeAction;
 
@@ -34,6 +41,8 @@ class Niveaux
 
     /**
      * @ORM\Column(type="boolean")
+     *
+     * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */
     private $archiver;
 
