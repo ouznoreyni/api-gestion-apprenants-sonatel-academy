@@ -41,10 +41,16 @@ class GroupeCompetences
      */
     private $referentiels;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archiver;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
         $this->referentiels = new ArrayCollection();
+        $this->setArchiver(false);
     }
 
     public function getId(): ?int
@@ -123,6 +129,18 @@ class GroupeCompetences
         if ($this->referentiels->removeElement($referentiel)) {
             $referentiel->removeCompetence($this);
         }
+
+        return $this;
+    }
+
+    public function getArchiver(): ?bool
+    {
+        return $this->archiver;
+    }
+
+    public function setArchiver(bool $archiver): self
+    {
+        $this->archiver = $archiver;
 
         return $this;
     }

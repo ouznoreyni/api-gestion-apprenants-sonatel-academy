@@ -54,6 +54,16 @@ class Promo
      */
     private $DateDebut;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archiver;
+
+    public function __construct()
+    {
+        $this->setArchiver(false);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -139,6 +149,18 @@ class Promo
     public function setDateDebut(\DateTimeInterface $DateDebut): self
     {
         $this->DateDebut = $DateDebut;
+
+        return $this;
+    }
+
+    public function getArchiver(): ?bool
+    {
+        return $this->archiver;
+    }
+
+    public function setArchiver(bool $archiver): self
+    {
+        $this->archiver = $archiver;
 
         return $this;
     }

@@ -32,6 +32,16 @@ class Niveaux
      */
     private $competences;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archiver;
+
+    public function __construct()
+    {
+        $this->setArchiver(false);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +79,18 @@ class Niveaux
     public function setCompetences(?Competences $competences): self
     {
         $this->competences = $competences;
+
+        return $this;
+    }
+
+    public function getArchiver(): ?bool
+    {
+        return $this->archiver;
+    }
+
+    public function setArchiver(bool $archiver): self
+    {
+        $this->archiver = $archiver;
 
         return $this;
     }

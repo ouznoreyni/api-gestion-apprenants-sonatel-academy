@@ -73,6 +73,7 @@ class ProfilSortie
     public function __construct()
     {
         $this->apprenants = new ArrayCollection();
+        $this->setArchiver(false);
     }
 
     public function getId(): ?int

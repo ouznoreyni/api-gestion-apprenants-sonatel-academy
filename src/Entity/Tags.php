@@ -44,6 +44,7 @@ class Tags
     public function __construct()
     {
         $this->groupeTags = new ArrayCollection();
+        $this->setArchiver(false);
     }
 
     public function getId(): ?int

@@ -45,6 +45,7 @@ class Competences
     {
         $this->groupeCompetences = new ArrayCollection();
         $this->niveauxes = new ArrayCollection();
+        $this->setArchiver(false);
     }
 
     public function getId(): ?int
