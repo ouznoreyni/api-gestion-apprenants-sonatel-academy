@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Count;
 
 /**
  * @ApiResource(
@@ -52,10 +50,6 @@ class Competences
     /**
      * @ORM\OneToMany(targetEntity=Niveaux::class, mappedBy="competences", cascade={"persist"})
      *
-     * @Assert\Count(
-     *      min = 3,
-     *      max = 3
-     * )
      *
      * @Groups({"comp:read", "comp:write", "grpcomp:read", "grpcomp:write", "ref:read", "ref:write"})
      */

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use App\Repository\ProfilSortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,8 +13,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *      routePrefix="/admin",
  *      normalizationContext={"groups"={"profilSortie:read"}},
  *      denormalizationContext={"groups"={"profilSortie:write"}},
+ *     itemOperations={"GET", "PUT", "DELETE"}
+ * )
+ * @ApiFilter(BooleanFilter::class, properties={"archiver"=false})
  * )
  * @ORM\Entity(repositoryClass=ProfilSortieRepository::class)
  */
