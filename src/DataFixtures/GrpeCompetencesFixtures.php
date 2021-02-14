@@ -21,7 +21,7 @@ class GrpeCompetencesFixtures extends Fixture
         for ($i = 0; $i < 5; $i++) {
 
             $groupeCompetences = new GroupeCompetences();
-            $groupeCompetences->setLibelle($faker->realText($maxNbChars = 50, $indexSize = 2));
+            $groupeCompetences->setLibelle($faker->realText($maxNbChars = 20, $indexSize = 2));
             $groupeCompetences->setDescription($faker->text);
 
             for ($j = 0; $j < 2; $j++) {
