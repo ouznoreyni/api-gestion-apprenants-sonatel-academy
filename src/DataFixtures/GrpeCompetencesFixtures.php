@@ -18,19 +18,19 @@ class GrpeCompetencesFixtures extends Fixture
 
         $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 5; $i++) {
 
             $groupeCompetences = new GroupeCompetences();
-            $groupeCompetences->setLibelle($faker->realText($maxNbChars = 100, $indexSize = 2));
+            $groupeCompetences->setLibelle($faker->realText($maxNbChars = 50, $indexSize = 2));
             $groupeCompetences->setDescription($faker->text);
 
-            for ($j = 0; $j < 5; $j++) {
+            for ($j = 0; $j < 2; $j++) {
                 $competences = new Competences();
-                $competences->setLibelle($faker->realText($maxNbChars = 100, $indexSize = 2));
+                $competences->setLibelle($faker->realText($maxNbChars = 20, $indexSize = 2));
                 for ($k = 1; $k < 4; $k++) {
                     $niveau = new Niveaux();
-                    $niveau->setCriteresEvaluation($faker->realText($maxNbChars = 100, $indexSize = 2));
-                    $niveau->setGroupeAction($faker->realText($maxNbChars = 100, $indexSize = 2));
+                    $niveau->setCriteresEvaluation($faker->realText($maxNbChars = 20, $indexSize = 2));
+                    $niveau->setGroupeAction($faker->realText($maxNbChars = 20, $indexSize = 2));
                     $manager->persist($niveau);
                     $competences->addNiveaux($niveau);
                 }

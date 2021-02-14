@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PromoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,7 +29,7 @@ class Promo
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $titre;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,7 +44,7 @@ class Promo
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $referencesAgate;
+    private $referenceAgate;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -52,16 +54,28 @@ class Promo
     /**
      * @ORM\Column(type="date")
      */
-    private $DateDebut;
+    private $dateStarting;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $archiver;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="promos")
+     */
+    private $groupes;
+
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->setArchiver(false);
+        $this->groupes = new ArrayCollection();
+        $this->setDateStarting(new \DateTime());
     }
 
     public function getId(): ?int
@@ -81,14 +95,14 @@ class Promo
         return $this;
     }
 
-    public function getTitre(): ?string
+    public function getTitle(): ?string
     {
-        return $this->titre;
+        return $this->title;
     }
 
-    public function setTitre(string $titre): self
+    public function setTitle(string $title): self
     {
-        $this->titre = $titre;
+        $this->title = $title;
 
         return $this;
     }
@@ -117,14 +131,14 @@ class Promo
         return $this;
     }
 
-    public function getReferencesAgate(): ?string
+    public function getReferenceAgate(): ?string
     {
-        return $this->referencesAgate;
+        return $this->referenceAgate;
     }
 
-    public function setReferencesAgate(string $referencesAgate): self
+    public function setReferenceAgate(string $referenceAgate): self
     {
-        $this->referencesAgate = $referencesAgate;
+        $this->referenceAgate = $referenceAgate;
 
         return $this;
     }
@@ -141,14 +155,14 @@ class Promo
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    public function getDateStarting(): ?\DateTimeInterface
     {
-        return $this->DateDebut;
+        return $this->dateStarting;
     }
 
-    public function setDateDebut(\DateTimeInterface $DateDebut): self
+    public function setDateStarting(\DateTimeInterface $dateStarting): self
     {
-        $this->DateDebut = $DateDebut;
+        $this->dateStarting = $dateStarting;
 
         return $this;
     }
@@ -161,6 +175,48 @@ class Promo
     public function setArchiver(bool $archiver): self
     {
         $this->archiver = $archiver;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Groupe[]
+     */
+    public function getGroupes(): Collection
+    {
+        return $this->groupes;
+    }
+
+    public function addGroupe(Groupe $groupe): self
+    {
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
+            $groupe->setPromos($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Groupe $groupe): self
+    {
+        if ($this->groupes->removeElement($groupe)) {
+            // set the owning side to null (unless already changed)
+            if ($groupe->getPromos() === $this) {
+                $groupe->setPromos(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

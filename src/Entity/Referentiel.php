@@ -117,7 +117,9 @@ class Referentiel
 
     public function getProgramme()
     {
-        return $this->programme;
+        $programme = @stream_get_contents($this->programme);
+        @fclose($this->programme);
+        return base64_encode($programme);
     }
 
     public function setProgramme($programme): self

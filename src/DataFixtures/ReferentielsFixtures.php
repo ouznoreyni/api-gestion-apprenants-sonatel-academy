@@ -13,11 +13,11 @@ class ReferentielsFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 5; $i++) {
             $referentiel = new Referentiel();
-            $referentiel->setLibelle($faker->realText($maxNbChars = 80, $indexSize = 2));
+            $referentiel->setLibelle($faker->realText($maxNbChars = 20, $indexSize = 2));
             $referentiel->setProgramme('programme.pdf');
-            $referentiel->setPresentation($faker->realText($maxNbChars = 200, $indexSize = 2));
+            $referentiel->setPresentation($faker->realText($maxNbChars = 150, $indexSize = 2));
 
             // $referentiel->addCompetence($this->getReference(GrpeCompetencesFixtures::GCOMPTENCE[$i]));
             $manager->persist($referentiel);

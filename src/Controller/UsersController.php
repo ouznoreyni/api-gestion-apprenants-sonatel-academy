@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ProfilRepository;
+use App\Repository\UserRepository;
 use App\Services\FileHelperService;
 use App\Services\UtilsService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,6 +80,40 @@ class UsersController extends AbstractController
         if ($avatar) {
             fclose($avatar);
         }
+        $userJson = $this->_serializer->serialize($user, "json", [
+            "groups" => "user:read",
+        ]);
+
+        return new JsonResponse($userJson, Response::HTTP_OK, [], true);
+
+    }
+
+    /**
+     * @Route(
+     *      path="/api/admin/users/{id}",
+     *      methods={"PUT"}
+     * )
+     */
+
+    public function update(
+        Request $request, UtilsService $utils,
+        FileHelperService $fileHelper,
+        SerializerInterface $serializer,
+        UserRepository $userRepository,
+        $id
+    ) {
+        $user = $userRepository->findOneById($id);
+        if (!$user) {
+            return $this->json(['error' => "User n'existe pas"], Response::HTTP_NOT_FOUND);
+        }
+        //get data and avatar from the request
+
+        $data = $utils->getDataFromContent($request);
+
+        $user = $utils->updateField($data, $user);
+
+        $this->_entityManager->flush();
+
         $userJson = $this->_serializer->serialize($user, "json", [
             "groups" => "user:read",
         ]);

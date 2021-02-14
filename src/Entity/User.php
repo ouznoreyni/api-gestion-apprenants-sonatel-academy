@@ -177,6 +177,8 @@ class User implements UserInterface
     public function __construct()
     {
         $this->setArchiver(false);
+        $this->setPrenom('prenom');
+        $this->setNom('nom');
     }
     public function getId(): ?int
     {

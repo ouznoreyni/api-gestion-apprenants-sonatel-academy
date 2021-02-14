@@ -26,6 +26,11 @@ class Apprenant extends User
      */
     private $profilSortie;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Groupe::class, inversedBy="apprenants")
+     */
+    private $groupe;
+
     public function getProfilSortie(): ?ProfilSortie
     {
         return $this->profilSortie;
@@ -34,6 +39,18 @@ class Apprenant extends User
     public function setProfilSortie(?ProfilSortie $profilSortie): self
     {
         $this->profilSortie = $profilSortie;
+
+        return $this;
+    }
+
+    public function getGroupe(): ?Groupe
+    {
+        return $this->groupe;
+    }
+
+    public function setGroupe(?Groupe $groupe): self
+    {
+        $this->groupe = $groupe;
 
         return $this;
     }
