@@ -7,7 +7,7 @@ class FileHelperService
 {
     public function uploadFile($file)
     {
-        if ($file) {
+        if (@$file) {
             return fopen($file->getRealPath(), "rb");
         } else {
             return null;
@@ -16,7 +16,7 @@ class FileHelperService
 
     public static function uploadExcel($file)
     {
-        if ($file) {
+        if (@$file) {
             $doc = IOFactory::identify($file);
             $docReader = IOFactory::createReader($doc);
             $spreadSheet = $docReader->load($file);

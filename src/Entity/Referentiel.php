@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      normalizationContext={"groups"={"ref:read"}},
  *      denormalizationContext={"groups"={"ref:write"}},
  *      collectionOperations={
- *          "POST"={},
+ *          "POST"={"deserialize"=false,},
  *          "GET"={},
  *          "get_grpecompetence_have_competences"={
  *              "method"="GET",
@@ -39,7 +39,7 @@ class Referentiel
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"ref:read"})
+     * @Groups({"ref:read", "ref:write"})
      */
     private $id;
 
@@ -79,6 +79,16 @@ class Referentiel
      * Groups({"ref:read"})
      */
     private $archiver;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $criteresEvaluation;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $criteresAdmission;
 
     public function __construct()
     {
@@ -161,6 +171,30 @@ class Referentiel
     public function setArchiver(bool $archiver): self
     {
         $this->archiver = $archiver;
+
+        return $this;
+    }
+
+    public function getCriteresEvaluation(): ?string
+    {
+        return $this->criteresEvaluation;
+    }
+
+    public function setCriteresEvaluation(string $criteresEvaluation): self
+    {
+        $this->criteresEvaluation = $criteresEvaluation;
+
+        return $this;
+    }
+
+    public function getCriteresAdmission(): ?string
+    {
+        return $this->criteresAdmission;
+    }
+
+    public function setCriteresAdmission(string $criteresAdmission): self
+    {
+        $this->criteresAdmission = $criteresAdmission;
 
         return $this;
     }

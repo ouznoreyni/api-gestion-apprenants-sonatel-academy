@@ -7,9 +7,23 @@ use App\Repository\PromoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      routePrefix="/admin",
+ *      normalizationContext={
+ *          "groups"={"promo:read"}
+ *      },
+ *      denormalizationContext={
+ *          "groups"={"promo:write"}
+ *      },
+ *      collectionOperations={
+ *          "GET",
+ *           "post"={"path"="/promos","deserialize"=false},
+ *      },
+ *      itemOperations={"GET", "PUT", "DELETE"}
+ * )
  * @ORM\Entity(repositoryClass=PromoRepository::class)
  */
 class Promo
@@ -39,7 +53,7 @@ class Promo
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $lieu;
+    private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -75,7 +89,6 @@ class Promo
     {
         $this->setArchiver(false);
         $this->groupes = new ArrayCollection();
-        $this->setDateStarting(new \DateTime());
     }
 
     public function getId(): ?int
@@ -119,14 +132,14 @@ class Promo
         return $this;
     }
 
-    public function getLieu(): ?string
+    public function getAddress(): ?string
     {
-        return $this->lieu;
+        return $this->address;
     }
 
-    public function setLieu(string $lieu): self
+    public function setAddress(string $address): self
     {
-        $this->lieu = $lieu;
+        $this->address = $address;
 
         return $this;
     }
@@ -160,9 +173,9 @@ class Promo
         return $this->dateStarting;
     }
 
-    public function setDateStarting(\DateTimeInterface $dateStarting): self
+    public function setDateStarting($dateStarting): self
     {
-        $this->dateStarting = $dateStarting;
+        $this->dateStarting = new \DateTime($dateStarting);
 
         return $this;
     }

@@ -53,7 +53,7 @@ class UtilsService
     }
     public function updateField($data, $user)
     {
-        foreach ($data as $name => $value) {
+        foreach (@$data as $name => $value) {
             $action = 'set' . ucfirst($name);
             if (method_exists($user, $action)) {
                 $user->$action($value);
@@ -95,8 +95,8 @@ class UtilsService
     {
         $collection = [];
         $array = [];
-        for ($name = 0; $name < count($data); $name++) {
-            foreach ($data[0] as $key => $keyArray) {
+        for (@$name = 0; $name < @count($data); $name++) {
+            foreach (@$data[0] as $key => $keyArray) {
                 if (!empty($data[$name + 1])) {
                     $array[$keyArray] = $data[$name + 1][$key];
                 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Apprenant;
 use App\Entity\Groupe;
+use App\Entity\Promo;
 use App\Entity\Promos;
 use App\Repository\ProfilRepository;
 use App\Services\FileHelperService;
@@ -45,24 +46,33 @@ class PromosController extends AbstractController
         FileHelperService $fileHelper
     ) {
         $apprenantsColletions = [];
+        $apprenantEmails = [];
         //get data and avatar from the request
         $data = $utils->getData($request);
+
         $image = $fileHelper->uploadFile($request->files->get("image"));
+
         $apprenantFiles = $fileHelper->uploadExcel($request->files->get("apprenantFiles"));
 
         $apprenantData = $utils->toArray($apprenantFiles);
-        if (!$apprenantData && empty($data['apprenantEmails']) && count($data['apprenants']) == 0) {
+
+        if (!@$apprenantData && @empty($data['apprenantEmails']) && @count($data['apprenantEmails']) == 0) {
             return $this->json(['message' => "Ajouter les apprenants"], Response::HTTP_BAD_REQUEST);
         }
-        $apprenantEmails = $data['apprenantEmails'];
-        foreach ($apprenantEmails as $email) {
+        if (!@empty($data['apprenantEmails'])) {
+            $apprenantEmails = json_decode($data['apprenantEmails']);
+            unset($data['apprenantEmails']);
+        }
+
+        foreach (@$apprenantEmails as $email) {
             array_push($apprenantData, ['email' => $email]);
         }
+
         //creation du groupe principal
         $groupePrincil = new Groupe();
         $groupePrincil->setName('Groupe Principal');
         //validate email
-        foreach ($apprenantData as $apprenant) {
+        foreach (@$apprenantData as $apprenant) {
             $newApprenant = new Apprenant();
             $newApprenant = $utils->updateField($apprenant, $newApprenant);
             $profil = $profilRepository->findOneBy(["libelle" => "Apprenant"]);
@@ -78,9 +88,10 @@ class PromosController extends AbstractController
 
             $utils->sendMail($newApprenant->getEmail(), $this->subjectEmail, $message);
         }
-        $this->_entityManager->persist($groupePrincil);
 
-        $promo = $serializer->denormalize($data, "App\Entity\Promo");
+        $this->_entityManager->persist($groupePrincil);
+        $promo = new Promo();
+        $promo = $utils->updateField($data, $promo);
         $errors = $validator->validate($promo);
 
         if (count($errors)) {
@@ -88,9 +99,12 @@ class PromosController extends AbstractController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST, [], true);
         }
         $promo->addGroupe($groupePrincil);
+
         $this->_entityManager->persist($promo);
+
         $this->_entityManager->flush();
 
         return $this->json(['message' => 'promos cree']);
     }
+
 }
