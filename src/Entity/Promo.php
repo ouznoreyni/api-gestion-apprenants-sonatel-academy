@@ -32,63 +32,93 @@ class Promo
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $referenceAgate;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $fabrique;
 
     /**
      * @ORM\Column(type="date")
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $dateStarting;
 
     /**
      * @ORM\Column(type="boolean")
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $archiver;
 
     /**
      * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="promos")
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $groupes;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     *
+     * @Groups({"promo:read", "promo:write"})
      */
     private $image;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Referentiel::class, inversedBy="promos")
+     *
+     * @Groups({"promo:read", "promo:write","ref:read"})
+     */
+    private $referentiels;
 
     public function __construct()
     {
         $this->setArchiver(false);
         $this->groupes = new ArrayCollection();
+        $this->referentiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,6 +260,30 @@ class Promo
     public function setImage($image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Referentiel[]
+     */
+    public function getReferentiels(): Collection
+    {
+        return $this->referentiels;
+    }
+
+    public function addReferentiel(Referentiel $referentiel): self
+    {
+        if (!$this->referentiels->contains($referentiel)) {
+            $this->referentiels[] = $referentiel;
+        }
+
+        return $this;
+    }
+
+    public function removeReferentiel(Referentiel $referentiel): self
+    {
+        $this->referentiels->removeElement($referentiel);
 
         return $this;
     }

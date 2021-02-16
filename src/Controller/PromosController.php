@@ -7,6 +7,7 @@ use App\Entity\Groupe;
 use App\Entity\Promo;
 use App\Entity\Promos;
 use App\Repository\ProfilRepository;
+use App\Repository\ReferentielRepository;
 use App\Services\FileHelperService;
 use App\Services\UtilsService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,11 +43,11 @@ class PromosController extends AbstractController
         Request $request,
         ProfilRepository $profilRepository,
         SerializerInterface $serializer,
+        ReferentielRepository $referentielRepository,
         ValidatorInterface $validator, UtilsService $utils,
         FileHelperService $fileHelper
     ) {
-        $apprenantsColletions = [];
-        $apprenantEmails = [];
+        $apprenantData = [];
         //get data and avatar from the request
         $data = $utils->getData($request);
 
@@ -56,25 +57,27 @@ class PromosController extends AbstractController
 
         $apprenantData = $utils->toArray($apprenantFiles);
 
-        if (!@$apprenantData && @empty($data['apprenantEmails']) && @count($data['apprenantEmails']) == 0) {
+        if (!@$apprenantData && @count($data['apprenantEmails']) == 0) {
             return $this->json(['message' => "Ajouter les apprenants"], Response::HTTP_BAD_REQUEST);
         }
-        if (!@empty($data['apprenantEmails'])) {
+
+        if (@count($data['apprenantEmails']) > 0) {
             $apprenantEmails = json_decode($data['apprenantEmails']);
             unset($data['apprenantEmails']);
-        }
+            foreach ($apprenantEmails as $email) {
+                array_push($apprenantData, ['email' => $email]);
+            }
 
-        foreach (@$apprenantEmails as $email) {
-            array_push($apprenantData, ['email' => $email]);
         }
 
         //creation du groupe principal
         $groupePrincil = new Groupe();
         $groupePrincil->setName('Groupe Principal');
-        //validate email
-        foreach (@$apprenantData as $apprenant) {
+
+        foreach ($apprenantData as $apprenant) {
             $newApprenant = new Apprenant();
             $newApprenant = $utils->updateField($apprenant, $newApprenant);
+
             $profil = $profilRepository->findOneBy(["libelle" => "Apprenant"]);
             $newApprenant->setProfil($profil);
             $password = "sonatelacademy";
@@ -99,6 +102,21 @@ class PromosController extends AbstractController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST, [], true);
         }
         $promo->addGroupe($groupePrincil);
+
+        //Ajout referentiels dans le promo
+        if (!@empty($data['referentiels'])) {
+            $referentielsId = json_decode($data['referentiels']);
+            unset($data['referentiels']);
+        }
+
+        foreach (@$referentielsId as $idRef) {
+            $ref = $referentielRepository->findOneById($idRef);
+            $promo->addReferentiel($ref);
+        }
+
+        if ($image) {
+            $promo->setImage($image);
+        }
 
         $this->_entityManager->persist($promo);
 

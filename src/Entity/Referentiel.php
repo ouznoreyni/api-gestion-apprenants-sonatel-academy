@@ -90,10 +90,16 @@ class Referentiel
      */
     private $criteresAdmission;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Promo::class, mappedBy="referentiels")
+     */
+    private $promos;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
         $this->setArchiver(false);
+        $this->promos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +201,33 @@ class Referentiel
     public function setCriteresAdmission(string $criteresAdmission): self
     {
         $this->criteresAdmission = $criteresAdmission;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Promo[]
+     */
+    public function getPromos(): Collection
+    {
+        return $this->promos;
+    }
+
+    public function addPromo(Promo $promo): self
+    {
+        if (!$this->promos->contains($promo)) {
+            $this->promos[] = $promo;
+            $promo->addReferentiel($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromo(Promo $promo): self
+    {
+        if ($this->promos->removeElement($promo)) {
+            $promo->removeReferentiel($this);
+        }
 
         return $this;
     }

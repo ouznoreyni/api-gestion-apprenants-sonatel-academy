@@ -18,6 +18,8 @@ class ReferentielsFixtures extends Fixture
             $referentiel->setLibelle($faker->realText($maxNbChars = 20, $indexSize = 2));
             $referentiel->setProgramme('programme.pdf');
             $referentiel->setPresentation($faker->realText($maxNbChars = 150, $indexSize = 2));
+            $referentiel->setCriteresAdmission($faker->realText($maxNbChars = 150, $indexSize = 2));
+            $referentiel->setCriteresEvaluation($faker->realText($maxNbChars = 150, $indexSize = 2));
 
             // $referentiel->addCompetence($this->getReference(GrpeCompetencesFixtures::GCOMPTENCE[$i]));
             $manager->persist($referentiel);
