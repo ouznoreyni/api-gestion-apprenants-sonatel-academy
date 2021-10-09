@@ -1,15 +1,15 @@
 api_platform:
   title: 'Suivi des apprenants ODC'
-  description: 'Les formateurs ODC, pour mieux suivre la progression de leurs apprenants, font appel à vous pour la réalisation d’une application web mobile de suivi des apprenants'
+  description: "C'est une api de l'application de gestion des apprenants de la sonatel academy pour mieux suivre la progression des apprenants."
   version: '1.0.0'
   mapping:
     paths: ['%kernel.project_dir%/src/Entity']
-  formats:
-    json: ['application/json']
+  #formats:
+  #json: ['application/json']
 
-  #patch_formats:
-  #json: ['application/merge-patch+json']
-  #multipart: ['multipart/form-data']
+  patch_formats:
+    json: ['application/merge-patch+json']
+    multipart: ['multipart/form-data']
   swagger:
     versions: [3]
   collection:
